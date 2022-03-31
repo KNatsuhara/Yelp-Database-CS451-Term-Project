@@ -47,7 +47,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = IglooZone1234$";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = Ddiger12";
         }
 
         private void addState()
@@ -313,6 +313,19 @@ namespace FancyFriendsYelpApp_v1
                 }
             }
             return false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (businessDataGrid.SelectedIndex > -1)
+            {
+                Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+                if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
+                {
+                    TipsWindow tips_window = new TipsWindow(B.business_id.ToString());
+                    tips_window.Show();
+                }
+            }
         }
     }
 }
