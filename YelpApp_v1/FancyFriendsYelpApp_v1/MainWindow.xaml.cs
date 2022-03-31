@@ -47,7 +47,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = Ddiger12";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = YOUR PASS HERE";
         }
 
         private void addState()
