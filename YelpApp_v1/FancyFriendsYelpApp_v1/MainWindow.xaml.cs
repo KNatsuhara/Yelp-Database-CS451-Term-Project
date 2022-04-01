@@ -47,7 +47,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = IglooZone1234$";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = PASSWORD";
         }
 
         private void addState()
@@ -251,17 +251,19 @@ namespace FancyFriendsYelpApp_v1
 
                 foreach (string filter in categoryFilterList.Items)
                 {
+                    string newFilter = filter.Replace("'", "''"); // Fixes the filter name if it contains an apostrophe
+
                     if (categoryFilterList.Items.Count == 1) // The only filter
                     {
-                        sqlStr += $"'{filter}') ";
+                        sqlStr += $"'{newFilter}') ";
                     }
                     else if (categoryFilterList.Items.Count-1 == categoryFilterList.Items.IndexOf(filter)) // The last filter
                     {
-                        sqlStr += $"'{filter}')";
+                        sqlStr += $"'{newFilter}')";
                     }
                     else // First and middle filters
                     {
-                        sqlStr += $"'{filter}', ";
+                        sqlStr += $"'{newFilter}', ";
                     }
                 }
 
@@ -281,13 +283,20 @@ namespace FancyFriendsYelpApp_v1
 
         private void addCategoryFilter_Click(object sender, RoutedEventArgs e)
         {
-            if (!checkIfCategoryExists(businessCategoryList.SelectedItem.ToString()))
+            try
             {
-                addCategoryFilterToList(businessCategoryList.SelectedItem.ToString());
+                if (!checkIfCategoryExists(businessCategoryList.SelectedItem.ToString()))
+                {
+                    addCategoryFilterToList(businessCategoryList.SelectedItem.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("Category has already been added!\n");
+                }
             }
-            else
+            catch
             {
-                Console.WriteLine("Category has already been added!\n");
+                Console.WriteLine("Nothing has been selected!\n");
             }
         }
 
@@ -313,6 +322,19 @@ namespace FancyFriendsYelpApp_v1
                 }
             }
             return false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (businessDataGrid.SelectedIndex > -1)
+            {
+                Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+                if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
+                {
+                    TipsWindow tips_window = new TipsWindow(B.business_id.ToString());
+                    tips_window.Show();
+                }
+            }
         }
     }
 }

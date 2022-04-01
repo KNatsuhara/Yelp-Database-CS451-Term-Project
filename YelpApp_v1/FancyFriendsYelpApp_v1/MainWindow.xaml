@@ -22,6 +22,7 @@
         <Button x:Name="addCategoryFilter" Content="Add" HorizontalAlignment="Left" Margin="20,494,0,0" VerticalAlignment="Top" Width="75" Click="addCategoryFilter_Click"/>
         <Button x:Name="removeCategoryFilter" Content="Remove" HorizontalAlignment="Left" Margin="107,494,0,0" VerticalAlignment="Top" Width="75" Click="removeCategoryFilter_Click"/>
         <ListBox x:Name="categoryFilterList" HorizontalAlignment="Left" Height="81" Margin="20,518,0,0" VerticalAlignment="Top" Width="162"/>
+        <Button x:Name="TipsButton" Content="Tips" HorizontalAlignment="Left" Margin="782,387,0,0" VerticalAlignment="Top" Height="45" Width="90" Click="Button_Click"/>
 
     </Grid>
 </Window>
