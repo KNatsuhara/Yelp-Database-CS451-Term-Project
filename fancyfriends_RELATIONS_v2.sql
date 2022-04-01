@@ -71,7 +71,7 @@ CREATE TABLE Hours (
 CREATE TABLE Check_in (
 	business_id CHAR(22),
 	check_in_time TIMESTAMP,
-	PRIMARY KEY (business_id, check_in_time, day, month, year),
+	PRIMARY KEY (business_id, check_in_time),
 	FOREIGN KEY (business_id) REFERENCES Business(business_id)
 );
 
