@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +38,7 @@ namespace FancyFriendsYelpApp_v1
         }
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password=IglooZone1234$";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password=YOUR PASS HERE";
         }
         private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
         {
