@@ -47,7 +47,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = PASSWORD";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = IglooZone1234$";
         }
 
         private void addState()
