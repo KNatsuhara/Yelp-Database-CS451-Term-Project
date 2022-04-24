@@ -5,24 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FancyFriendsYelpApp_v1"
         mc:Ignorable="d"
-        Title="Fancy Friends Yelp App" Height="675" Width="1200">
+        Title="Fancy Friends Yelp App" Height="720" Width="1250">
     <Grid>
-        <Label Content="State" HorizontalAlignment="Left" Margin="20,65,0,0" VerticalAlignment="Top"/>
-        <Label Content="City" HorizontalAlignment="Left" Margin="20,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.724,0"/>
-        <ComboBox x:Name="stateList" HorizontalAlignment="Left" Margin="62,68,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="stateList_SelectionChanged"/>
-        <Label Content="Select Location:" HorizontalAlignment="Left" Margin="20,34,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="cityList" HorizontalAlignment="Left" Height="86" Margin="20,117,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="cityList_SelectionChanged"/>
-        <Label Content="Zipcode" HorizontalAlignment="Left" Margin="20,208,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="zipcodeList" HorizontalAlignment="Left" Height="60" Margin="20,234,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="zipcodeList_SelectionChanged"/>
-        <Label Content="Business Category" HorizontalAlignment="Left" Margin="20,299,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="businessCategoryList" HorizontalAlignment="Left" Height="159" Margin="20,330,0,0" VerticalAlignment="Top" Width="162"/>
-        <DataGrid x:Name="businessDataGrid" HorizontalAlignment="Left" Height="298" Margin="207,68,0,0" VerticalAlignment="Top" Width="665" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
-        <Label Content="SEARCH RESULTS" HorizontalAlignment="Left" Margin="207,34,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="searchBusinesses" Content="Search Businesses" HorizontalAlignment="Left" Margin="20,610,0,0" VerticalAlignment="Top" Width="162" Click="searchBusinessesButton_Click"/>
-        <Button x:Name="addCategoryFilter" Content="Add" HorizontalAlignment="Left" Margin="20,494,0,0" VerticalAlignment="Top" Width="75" Click="addCategoryFilter_Click"/>
-        <Button x:Name="removeCategoryFilter" Content="Remove" HorizontalAlignment="Left" Margin="107,494,0,0" VerticalAlignment="Top" Width="75" Click="removeCategoryFilter_Click"/>
-        <ListBox x:Name="categoryFilterList" HorizontalAlignment="Left" Height="81" Margin="20,518,0,0" VerticalAlignment="Top" Width="162"/>
-        <Button x:Name="TipsButton" Content="Tips" HorizontalAlignment="Left" Margin="782,387,0,0" VerticalAlignment="Top" Height="45" Width="90" Click="Button_Click"/>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="313*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0,0,-0.4,-0.4" Grid.RowSpan="2">
+            <TabControl Margin="0,0,0.6,-0.2">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="User Information" Foreground="Black" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Label Content="Content goes here..." />
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Business Search" Foreground="Black" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Label Content="State" HorizontalAlignment="Left" Margin="20,65,0,0" VerticalAlignment="Top"/>
+                        <Label Content="City" HorizontalAlignment="Left" Margin="20,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.724,0"/>
+                        <ComboBox x:Name="stateList" HorizontalAlignment="Left" Margin="62,68,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="stateList_SelectionChanged"/>
+                        <Label Content="Select Location:" HorizontalAlignment="Left" Margin="20,34,0,0" VerticalAlignment="Top"/>
+                        <ListBox x:Name="cityList" HorizontalAlignment="Left" Height="86" Margin="20,117,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="cityList_SelectionChanged"/>
+                        <Label Content="Zipcode" HorizontalAlignment="Left" Margin="20,208,0,0" VerticalAlignment="Top"/>
+                        <ListBox x:Name="zipcodeList" HorizontalAlignment="Left" Height="60" Margin="20,234,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="zipcodeList_SelectionChanged"/>
+                        <Label Content="Business Category" HorizontalAlignment="Left" Margin="20,299,0,0" VerticalAlignment="Top"/>
+                        <ListBox x:Name="businessCategoryList" HorizontalAlignment="Left" Height="159" Margin="20,330,0,0" VerticalAlignment="Top" Width="162"/>
+                        <DataGrid x:Name="businessDataGrid" HorizontalAlignment="Left" Height="298" Margin="207,68,0,0" VerticalAlignment="Top" Width="665" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
+                        <Label Content="SEARCH RESULTS" HorizontalAlignment="Left" Margin="207,34,0,0" VerticalAlignment="Top"/>
+                        <Button x:Name="searchBusinesses" Content="Search Businesses" HorizontalAlignment="Left" Margin="20,610,0,0" VerticalAlignment="Top" Width="162" Click="searchBusinessesButton_Click"/>
+                        <Button x:Name="addCategoryFilter" Content="Add" HorizontalAlignment="Left" Margin="20,494,0,0" VerticalAlignment="Top" Width="75" Click="addCategoryFilter_Click"/>
+                        <Button x:Name="removeCategoryFilter" Content="Remove" HorizontalAlignment="Left" Margin="107,494,0,0" VerticalAlignment="Top" Width="75" Click="removeCategoryFilter_Click"/>
+                        <ListBox x:Name="categoryFilterList" HorizontalAlignment="Left" Height="81" Margin="20,518,0,0" VerticalAlignment="Top" Width="162"/>
+                        <Button x:Name="TipsButton" Content="Tips" HorizontalAlignment="Left" Margin="782,387,0,0" VerticalAlignment="Top" Height="45" Width="90" Click="Button_Click"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>
