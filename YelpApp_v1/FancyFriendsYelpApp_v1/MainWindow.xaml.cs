@@ -29,7 +29,6 @@ namespace FancyFriendsYelpApp_v1
             public string state { get; set; }
             public string city { get; set; }
             public string address { get; set; }
-            public double distance { get; set; }
             public int num_checkins { get; set; }
             public int num_tips { get; set; }
             public int stars { get; set; }
@@ -37,6 +36,7 @@ namespace FancyFriendsYelpApp_v1
             public bool is_open { get; set; }
             public double latitude { get; set; }
             public double longitude { get; set; }
+            public double distance { get; set; }
         }
 
         public class Tip
@@ -217,6 +217,7 @@ namespace FancyFriendsYelpApp_v1
             tipsListGrid.Columns.Add(col5);
         }
 
+        // executes SELECT queries
         private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
         {
             using (var connection = new NpgsqlConnection(buildConnectionString()))
@@ -233,6 +234,33 @@ namespace FancyFriendsYelpApp_v1
                         {
                             myf(reader);
                         }
+                    }
+                    catch (NpgsqlException ex) // Catches any mistakes in the query
+                    {
+                        Console.WriteLine(ex.Message.ToString()); // Displays error message
+                        System.Windows.MessageBox.Show("SQL Error - " + ex.Message.ToString());
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+        }
+
+        // executes UPDATES, INSERTS, DELETES queries
+        private void executeUpdate(string sqlstr)
+        {
+            using (var connection = new NpgsqlConnection(buildConnectionString()))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = sqlstr;
+                    try
+                    {
+                        var reader = cmd.ExecuteNonQuery(); // Execute Query
                     }
                     catch (NpgsqlException ex) // Catches any mistakes in the query
                     {
@@ -280,11 +308,47 @@ namespace FancyFriendsYelpApp_v1
         // Inserts Business Data into businessDataGrid
         private void addGridRow(NpgsqlDataReader R)
         {
-            businessDataGrid.Items.Add(new Business() { business_id = R.GetString(0), name = R.GetString(1), num_checkins = R.GetInt32(2), 
-                stars = R.GetInt32(3), num_tips = R.GetInt32(4), state = R.GetString(5), city = R.GetString(6), zip_code = R.GetInt32(7), 
-                is_open = R.GetBoolean(8), latitude = R.GetDouble(9), longitude = R.GetDouble(10), address  = R.GetString(11) }); // Collect results from reader
+            businessDataGrid.Items.Add(new Business()
+            {
+                business_id = R.GetString(0),
+                name = R.GetString(1),
+                num_checkins = R.GetInt32(2),
+                stars = R.GetInt32(3),
+                num_tips = R.GetInt32(4),
+                state = R.GetString(5),
+                city = R.GetString(6),
+                zip_code = R.GetInt32(7),
+                is_open = R.GetBoolean(8),
+                latitude = R.GetDouble(9),
+                longitude = R.GetDouble(10),
+                address = R.GetString(11),
+                distance = haversine(R.GetDouble(9), R.GetDouble(10), Convert.ToDouble(latitude.Text), Convert.ToDouble(longitude.Text))
+            }); // Collect results from reader
             count += 1;
             Console.WriteLine(count);
+        }
+
+        private double haversine(double lat1, double lon1,
+            double lat2, double lon2)
+        {
+            // distance between latitudes and longitudes
+            double dLat = (Math.PI / 180) * (lat2 - lat1);
+            double dLon = (Math.PI / 180) * (lon2 - lon1);
+
+            // convert to radians
+            lat1 = (Math.PI / 180) * (lat1);
+            lat2 = (Math.PI / 180) * (lat2);
+
+            // apply formula
+            double a = Math.Pow(Math.Sin(dLat / 2), 2) +
+                        Math.Pow(Math.Sin(dLon / 2), 2) *
+                        Math.Cos(lat1) * Math.Cos(lat2);
+            double rad = 6371;
+            double c = 2 * Math.Asin(Math.Sqrt(a));
+            double kilometers = rad * c;
+
+            // return miles cause we're american
+            return kilometers / 1.609;
         }
 
         // Inserts Friends Data into friendsDataGrid
@@ -500,6 +564,27 @@ namespace FancyFriendsYelpApp_v1
                     tips_window.Show();
                 }
             }
+        }
+        private void updateUserLocation_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                double user_lat = 0;
+                user_lat = Convert.ToDouble(latitude.Text);
+                double user_long = 0;
+                user_long = Convert.ToDouble(longitude.Text);
+
+                string query =
+                        $"UPDATE Users " +
+                        $"SET latitude = {user_lat}, longitude = {user_long} " +
+                        $"WHERE user_id = '{userIDList.SelectedItem.ToString()}'";
+                executeUpdate(query);
+            }
+            catch
+            {
+                Console.WriteLine("A user has not been selected!\n");
+            }
+
         }
 
         private void userName_TextChanged(object sender, TextChangedEventArgs e)
