@@ -42,8 +42,8 @@ namespace FancyFriendsYelpApp_v1
         public class Tip
         {
             public string user_name { get; set; }
-            public int business { get; set; }
-            public double city { get; set; }
+            public string business { get; set; }
+            public string city { get; set; }
             public string text { get; set; }
             public string date { get; set; }
         }
@@ -287,6 +287,35 @@ namespace FancyFriendsYelpApp_v1
             Console.WriteLine(count);
         }
 
+        // Inserts Friends Data into friendsDataGrid
+        private void addFriendsGridRow(NpgsqlDataReader R)
+        {
+            friendsGrid.Items.Add(new Friend()
+            {
+                first_name = R.GetString(0),
+                total_tip_likes = R.GetInt32(1),
+                average_stars = R.GetDouble(2),
+                date_joined = R.GetString(3)
+            }); // Collect results from reader
+            count += 1;
+            Console.WriteLine(count);
+        }
+
+        // Inserts Friends Tip Data into friendsTipDataGrid
+        private void addFriendsTipGridRow(NpgsqlDataReader R)
+        {
+            tipsListGrid.Items.Add(new Tip()
+            {
+                user_name = R.GetString(0),
+                business = R.GetString(1),
+                city = R.GetString(2),
+                text = R.GetString(3),
+                date = R.GetString(4)
+            }); // Collect results from reader
+            count += 1;
+            Console.WriteLine(count);
+        }
+
         private void stateList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cityList.Items.Clear(); // Clears zipcodeList when selection changes to another city [prevents appending]
@@ -320,6 +349,30 @@ namespace FancyFriendsYelpApp_v1
             {
                 string sqlStr = $"SELECT distinct category.name FROM category, business WHERE business.business_id = category.business_id AND state = '{stateList.SelectedItem.ToString()}' AND city = '{cityList.SelectedItem.ToString()}' AND business.zip_code = '{zipcodeList.SelectedItem}' ORDER BY category.name";
                 executeQuery(sqlStr, addCategory);
+            }
+        }
+
+        private void userId_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            friendsGrid.Items.Clear(); // Clears friend list when switching to another user [prevents appending]
+            tipsListGrid.Items.Clear(); // Clears recent tips from friends when new user "logs in"
+
+            if (userIDList.SelectedIndex > -1)
+            {
+                string sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
+                    $"FROM Users, Friends " +
+                    $"WHERE Friends.user_id = '{userIDList.SelectedItem.ToString()}' " +
+                    $"AND Users.user_id = Users.user_id2'";
+                executeQuery(sqlStr, addFriendsGridRow);
+
+                sqlStr = $"SELECT Users.first_name, Business.name, Business.city, TempTip.tip_text, TempTip.tip_time " +
+                    $"FROM Users, Friends, Business," +
+                    $"(SELECT DISTINCT ON(user_id) user_id, business_id, tip_time, tip_text FROM Tip ORDER BY user_id, tip_time DESC) AS TempTip " +
+                    $"WHERE Friends.user_id = '{userIDList.SelectedItem.ToString()}' " +
+                    $"AND Users.user_id = Friends.user_id2 " +
+                    $"AND TempTip.user_id = Friends.user_id2 " +
+                    $"AND TempTip.business_id = Business.business_id";
+                executeQuery(sqlStr, addFriendsTipGridRow);
             }
         }
 
