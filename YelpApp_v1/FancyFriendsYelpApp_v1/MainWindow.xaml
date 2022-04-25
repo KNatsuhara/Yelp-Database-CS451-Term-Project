@@ -52,7 +52,7 @@
                         <Button x:Name="Update" Content="Update" HorizontalAlignment="Left" Margin="345,285,0,0" VerticalAlignment="Top" Height="20" Width="46" Click="Button_Click" RenderTransformOrigin="0.5,1.2"/>
                         <Label Content="Lat:" HorizontalAlignment="Left" Margin="220,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
                         <Label Content="Friends" HorizontalAlignment="Left" Margin="10,303,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <ListBox x:Name="friendsList" HorizontalAlignment="Left" Height="317" Margin="10,334,0,0" VerticalAlignment="Top" Width="381"/>
+                        <DataGrid x:Name="friendsGrid" HorizontalAlignment="Left" Height="317" Margin="10,334,0,0" VerticalAlignment="Top" Width="381" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
                         <Label Content="Latest tips from friends" HorizontalAlignment="Left" Margin="416,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
                         <DataGrid x:Name="tipsListGrid" HorizontalAlignment="Left" Height="609" Margin="416,42,0,0" VerticalAlignment="Top" Width="809" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
                     </Grid>

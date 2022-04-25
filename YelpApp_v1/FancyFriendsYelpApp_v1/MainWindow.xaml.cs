@@ -39,7 +39,16 @@ namespace FancyFriendsYelpApp_v1
             public double longitude { get; set; }
         }
 
-        public class User
+        public class Tip
+        {
+            public string user_name { get; set; }
+            public int business { get; set; }
+            public double city { get; set; }
+            public string text { get; set; }
+            public string date { get; set; }
+        }
+
+        public class Friend
         {
             public string first_name { get; set; }
             public int total_tip_likes { get; set; }
@@ -53,6 +62,7 @@ namespace FancyFriendsYelpApp_v1
             addState();
             addColumnsToGrid();
             addColumnsToFriendsGrid();
+            addColumnsToTipsGrid();
         }
 
         private string buildConnectionString()
@@ -150,28 +160,61 @@ namespace FancyFriendsYelpApp_v1
         private void addColumnsToFriendsGrid()
         {
             DataGridTextColumn col1 = new DataGridTextColumn();
-            col1.Binding = new Binding("first_name");
-            col1.Header = "FirstName";
-            col1.Width = 225;
-            tipsListGrid.Columns.Add(col1);
+            col1.Binding = new Binding("name");
+            col1.Header = "Name";
+            col1.Width = 115;
+            friendsGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
             col2.Binding = new Binding("total_tip_likes");
-            col2.Header = "TotalTipLikes";
-            col2.Width = 175;
-            tipsListGrid.Columns.Add(col2);
+            col2.Header = "TotalLikes";
+            col2.Width = 75;
+            friendsGrid.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Binding = new Binding("average_stars");
             col3.Header = "AvgStars";
+            col3.Width = 75;
+            friendsGrid.Columns.Add(col3);
+
+            DataGridTextColumn col4 = new DataGridTextColumn();
+            col4.Binding = new Binding("date_joined");
+            col4.Header = "Yelping Since";
+            col4.Width = 150;
+            friendsGrid.Columns.Add(col4);
+        }
+
+        private void addColumnsToTipsGrid()
+        {
+            DataGridTextColumn col1 = new DataGridTextColumn();
+            col1.Binding = new Binding("user_name");
+            col1.Header = "User Name";
+            col1.Width = 225;
+            tipsListGrid.Columns.Add(col1);
+
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Binding = new Binding("business");
+            col2.Header = "Business";
+            col2.Width = 175;
+            tipsListGrid.Columns.Add(col2);
+
+            DataGridTextColumn col3 = new DataGridTextColumn();
+            col3.Binding = new Binding("city");
+            col3.Header = "City";
             col3.Width = 100;
             tipsListGrid.Columns.Add(col3);
 
             DataGridTextColumn col4 = new DataGridTextColumn();
-            col4.Binding = new Binding("date_joined");
-            col4.Header = "DateJoined";
+            col4.Binding = new Binding("text");
+            col4.Header = "Text";
             col4.Width = 50;
             tipsListGrid.Columns.Add(col4);
+
+            DataGridTextColumn col5 = new DataGridTextColumn();
+            col5.Binding = new Binding("date");
+            col5.Header = "Date";
+            col5.Width = 50;
+            tipsListGrid.Columns.Add(col5);
         }
 
         private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
@@ -379,10 +422,20 @@ namespace FancyFriendsYelpApp_v1
         private void userName_TextChanged(object sender, TextChangedEventArgs e)
         {
             userIDList?.Items?.Clear();
-            friendsList?.Items?.Clear();
+            friendsGrid?.Items?.Clear();
+            tipsListGrid?.Items?.Clear();
             ClearAllUserData();
+
+            string currText = userName.Text;
+            if (!string.IsNullOrEmpty(currText))
+            {
+
+            }
         }
 
+        /// <summary>
+        /// Clears all fields in the User Information section.
+        /// </summary>
         private void ClearAllUserData()
         {
             nameTextbox?.Clear();
@@ -396,7 +449,6 @@ namespace FancyFriendsYelpApp_v1
             tipLikes?.Clear();
             latitude?.Clear();
             longitude?.Clear();
-
         }
     }
 }
