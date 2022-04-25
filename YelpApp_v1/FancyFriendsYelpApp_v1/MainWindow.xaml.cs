@@ -162,7 +162,7 @@ namespace FancyFriendsYelpApp_v1
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Binding = new Binding("first_name");
             col1.Header = "Name";
-            col1.Width = 115;
+            col1.Width = 75;
             friendsGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
@@ -174,13 +174,13 @@ namespace FancyFriendsYelpApp_v1
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Binding = new Binding("average_stars");
             col3.Header = "AvgStars";
-            col3.Width = 75;
+            col3.Width = 65;
             friendsGrid.Columns.Add(col3);
 
             DataGridTextColumn col4 = new DataGridTextColumn();
             col4.Binding = new Binding("date_joined");
             col4.Header = "Yelping Since";
-            col4.Width = 150;
+            col4.Width = 80;
             friendsGrid.Columns.Add(col4);
         }
 
@@ -189,31 +189,31 @@ namespace FancyFriendsYelpApp_v1
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Binding = new Binding("user_name");
             col1.Header = "User Name";
-            col1.Width = 225;
+            col1.Width = 100;
             tipsListGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
             col2.Binding = new Binding("business");
             col2.Header = "Business";
-            col2.Width = 175;
+            col2.Width = 200;
             tipsListGrid.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Binding = new Binding("city");
             col3.Header = "City";
-            col3.Width = 100;
+            col3.Width = 75;
             tipsListGrid.Columns.Add(col3);
 
             DataGridTextColumn col4 = new DataGridTextColumn();
             col4.Binding = new Binding("text");
             col4.Header = "Text";
-            col4.Width = 50;
+            col4.Width = 300;
             tipsListGrid.Columns.Add(col4);
 
             DataGridTextColumn col5 = new DataGridTextColumn();
             col5.Binding = new Binding("date");
             col5.Header = "Date";
-            col5.Width = 50;
+            col5.Width = 65;
             tipsListGrid.Columns.Add(col5);
         }
 
@@ -316,6 +316,21 @@ namespace FancyFriendsYelpApp_v1
             Console.WriteLine(count);
         }
 
+        private void addUserInformation(NpgsqlDataReader R)
+        {
+            nameTextbox.Text = (R.GetString(0) + " " + R.GetString(1)).Trim();
+            starsTextbox.Text = R.GetDouble(2).ToString();
+            fansTextbox.Text = R.GetInt32(3).ToString();
+            yelpingTextbox.Text = R.GetDate(4).ToString();
+            funnyVotes.Text = R.GetInt32(5).ToString();
+            coolVotes.Text = R.GetInt32(6).ToString();
+            usefulVotes.Text = R.GetInt32(7).ToString();
+            tipCount.Text = R.GetInt32(8).ToString();
+            tipLikes.Text = R.GetInt32(9).ToString();
+            latitude.Text = R.GetDouble(10).ToString();
+            longitude.Text = R.GetDouble(11).ToString();
+        }
+
         private void stateList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cityList.Items.Clear(); // Clears zipcodeList when selection changes to another city [prevents appending]
@@ -356,15 +371,25 @@ namespace FancyFriendsYelpApp_v1
         {
             friendsGrid.Items.Clear(); // Clears friend list when switching to another user [prevents appending]
             tipsListGrid.Items.Clear(); // Clears recent tips from friends when new user "logs in"
+            ClearAllUserData();
 
             if (userIDList.SelectedIndex > -1)
             {
-                string sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
+                string sqlStr;
+                // User information section
+                sqlStr = $"SELECT first_name, last_name, average_stars, number_of_fans, date_joined, funny, cool, useful, total_tip_count, total_tip_likes, latitude, longitude " +
+                    $"FROM Users " +
+                    $"WHERE user_id = '{userIDList.SelectedItem}';";
+                executeQuery(sqlStr, addUserInformation);
+
+                // Friends grid
+                sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
                     $"FROM Users, Friends " +
                     $"WHERE Friends.user_id = '{userIDList.SelectedItem.ToString()}' " +
                     $"AND Users.user_id = Friends.user_id2";
                 executeQuery(sqlStr, addFriendsGridRow);
 
+                // Latest tips grid
                 sqlStr = $"SELECT Users.first_name, Business.name, Business.city, TempTip.tip_text, TempTip.tip_time " +
                     $"FROM Users, Friends, Business," +
                     $"(SELECT DISTINCT ON(user_id) user_id, business_id, tip_time, tip_text FROM Tip ORDER BY user_id, tip_time DESC) AS TempTip " +
