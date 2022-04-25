@@ -160,7 +160,7 @@ namespace FancyFriendsYelpApp_v1
         private void addColumnsToFriendsGrid()
         {
             DataGridTextColumn col1 = new DataGridTextColumn();
-            col1.Binding = new Binding("name");
+            col1.Binding = new Binding("first_name");
             col1.Header = "Name";
             col1.Width = 115;
             friendsGrid.Columns.Add(col1);
@@ -295,7 +295,7 @@ namespace FancyFriendsYelpApp_v1
                 first_name = R.GetString(0),
                 total_tip_likes = R.GetInt32(1),
                 average_stars = R.GetDouble(2),
-                date_joined = R.GetString(3)
+                date_joined = R.GetDate(3).ToString()
             }); // Collect results from reader
             count += 1;
             Console.WriteLine(count);
@@ -310,7 +310,7 @@ namespace FancyFriendsYelpApp_v1
                 business = R.GetString(1),
                 city = R.GetString(2),
                 text = R.GetString(3),
-                date = R.GetString(4)
+                date = R.GetDateTime(4).ToString()
             }); // Collect results from reader
             count += 1;
             Console.WriteLine(count);
@@ -362,7 +362,7 @@ namespace FancyFriendsYelpApp_v1
                 string sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
                     $"FROM Users, Friends " +
                     $"WHERE Friends.user_id = '{userIDList.SelectedItem.ToString()}' " +
-                    $"AND Users.user_id = Users.user_id2'";
+                    $"AND Users.user_id = Friends.user_id2";
                 executeQuery(sqlStr, addFriendsGridRow);
 
                 sqlStr = $"SELECT Users.first_name, Business.name, Business.city, TempTip.tip_text, TempTip.tip_time " +
