@@ -378,23 +378,24 @@ namespace FancyFriendsYelpApp_v1
 
         private void userName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            userIDList?.Items?.Clear();
             friendsList?.Items?.Clear();
             ClearAllUserData();
         }
 
         private void ClearAllUserData()
         {
-            nameTextbox.Clear();
-            starsTextbox.Clear();
-            fansTextbox.Clear();
-            yelpingTextbox.Clear();
-            funnyVotes.Clear();
-            coolVotes.Clear();
-            usefulVotes.Clear();
-            tipCount.Clear();
-            tipLikes.Clear();
-            latitude.Clear();
-            longitude.Clear();
+            nameTextbox?.Clear();
+            starsTextbox?.Clear();
+            fansTextbox?.Clear();
+            yelpingTextbox?.Clear();
+            funnyVotes?.Clear();
+            coolVotes?.Clear();
+            usefulVotes?.Clear();
+            tipCount?.Clear();
+            tipLikes?.Clear();
+            latitude?.Clear();
+            longitude?.Clear();
 
         }
     }
