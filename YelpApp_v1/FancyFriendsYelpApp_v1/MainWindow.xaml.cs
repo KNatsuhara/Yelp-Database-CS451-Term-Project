@@ -38,11 +38,21 @@ namespace FancyFriendsYelpApp_v1
             public double latitude { get; set; }
             public double longitude { get; set; }
         }
+
+        public class User
+        {
+            public string first_name { get; set; }
+            public int total_tip_likes { get; set; }
+            public double average_stars { get; set; }
+            public string date_joined { get; set; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             addState();
             addColumnsToGrid();
+            addColumnsToFriendsGrid();
         }
 
         private string buildConnectionString()
@@ -79,6 +89,7 @@ namespace FancyFriendsYelpApp_v1
                 }
             }
         }
+
         private void addColumnsToGrid()
         {
             DataGridTextColumn col1 = new DataGridTextColumn();
@@ -135,6 +146,34 @@ namespace FancyFriendsYelpApp_v1
             col9.Width = 150;
             businessDataGrid.Columns.Add(col9);
         }
+
+        private void addColumnsToFriendsGrid()
+        {
+            DataGridTextColumn col1 = new DataGridTextColumn();
+            col1.Binding = new Binding("first_name");
+            col1.Header = "FirstName";
+            col1.Width = 225;
+            tipsListGrid.Columns.Add(col1);
+
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Binding = new Binding("total_tip_likes");
+            col2.Header = "TotalTipLikes";
+            col2.Width = 175;
+            tipsListGrid.Columns.Add(col2);
+
+            DataGridTextColumn col3 = new DataGridTextColumn();
+            col3.Binding = new Binding("average_stars");
+            col3.Header = "AvgStars";
+            col3.Width = 100;
+            tipsListGrid.Columns.Add(col3);
+
+            DataGridTextColumn col4 = new DataGridTextColumn();
+            col4.Binding = new Binding("date_joined");
+            col4.Header = "DateJoined";
+            col4.Width = 50;
+            tipsListGrid.Columns.Add(col4);
+        }
+
         private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
         {
             using (var connection = new NpgsqlConnection(buildConnectionString()))
@@ -335,6 +374,28 @@ namespace FancyFriendsYelpApp_v1
                     tips_window.Show();
                 }
             }
+        }
+
+        private void userName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            friendsList?.Items?.Clear();
+            ClearAllUserData();
+        }
+
+        private void ClearAllUserData()
+        {
+            nameTextbox.Clear();
+            starsTextbox.Clear();
+            fansTextbox.Clear();
+            yelpingTextbox.Clear();
+            funnyVotes.Clear();
+            coolVotes.Clear();
+            usefulVotes.Clear();
+            tipCount.Clear();
+            tipLikes.Clear();
+            latitude.Clear();
+            longitude.Clear();
+
         }
     }
 }
