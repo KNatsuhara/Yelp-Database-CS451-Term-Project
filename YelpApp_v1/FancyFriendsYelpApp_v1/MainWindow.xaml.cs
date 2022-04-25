@@ -262,6 +262,11 @@ namespace FancyFriendsYelpApp_v1
             businessCategoryList.Items.Add(R.GetString(0)); // Collect results from reader
         }
 
+        private void addUserID(NpgsqlDataReader R)
+        {
+            userIDList.Items.Add(R.GetString(0)); // Collect results from reader
+        }
+
         private void addCategoryFilterToList(string categoryName)
         {
             categoryFilterList.Items.Add(categoryName);
@@ -429,7 +434,26 @@ namespace FancyFriendsYelpApp_v1
             string currText = userName.Text;
             if (!string.IsNullOrEmpty(currText))
             {
+                string[] split = currText.Split(' ');
+                string first = split[0];
+                string last = null;
+                if (split.Length > 1)
+                {
+                    last = split[1];
+                }
 
+                string query =
+                    $"SELECT user_id " +
+                    $"FROM users " +
+                    $"WHERE first_name LIKE '{first.ToString()}%'";
+                if (!string.IsNullOrEmpty(last))
+                {
+                    query += $"AND last_name LIKE '{last}%'";
+                }
+                query += "ORDER BY first_name";
+                query += ";";
+
+                executeQuery(query, addUserID);
             }
         }
 
