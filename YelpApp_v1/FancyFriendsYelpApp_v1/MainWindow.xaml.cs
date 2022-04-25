@@ -67,7 +67,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = YOUR PASS HERE";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = YOUR_PASS_HERE";
         }
 
         private void addState()
@@ -526,6 +526,51 @@ namespace FancyFriendsYelpApp_v1
             tipLikes?.Clear();
             latitude?.Clear();
             longitude?.Clear();
+        }
+
+        /// <summary>
+        /// Display selected business information whenever the selection is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void businessDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+            if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
+            {
+                // change name, address and hours labels
+                selectedNameLabel.Content = B.name;
+                selectedAddressLabel.Content = B.address + ", " + B.city + ", " + B.state;
+
+                // calculate current day
+                System.DayOfWeek current_day = DateTime.Today.DayOfWeek;
+                //selectedHoursLabel.Content = current_day.ToString();
+                selectedHoursLabel.Content = "";
+
+                string sqlstr = $"SELECT open_time,closing_time FROM hours WHERE business_id = '{B.business_id}' AND day = '{current_day.ToString()}'";
+                executeQuery(sqlstr, addSelectedHoursLabel);
+
+            }
+        }
+
+        private void addSelectedHoursLabel(NpgsqlDataReader R)
+        {
+            //tipsGrid.Items.Add(new Tip() { date = R.GetString(0), user_name = R.GetString(1), likes = R.GetInt32(2), text = R.GetString(3) });
+            // test bid: gnKjwL_1w79qoiV3IC_xQQ
+            selectedHoursLabel.Content = "Today's Hours: \nOpen: " + R.GetTimeSpan(0).ToString() + " \nClosed: " + R.GetTimeSpan(1).ToString();
+        }
+
+        private void checkInsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (businessDataGrid.SelectedIndex > -1)
+            {
+                Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+                if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
+                {
+                    CheckInsWindow checkins_window = new CheckInsWindow(B.business_id.ToString());
+                    checkins_window.Show();
+                }
+            }
         }
     }
 }

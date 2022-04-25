@@ -20,40 +20,44 @@
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
-                        <Label Content="Set Current User" HorizontalAlignment="Right" Margin="0,10,1128,0" VerticalAlignment="Top" Height="32" RenderTransformOrigin="0.464,-0.797"/>
-                        <TextBox x:Name="userName" TextWrapping="Wrap" Text="TextBox" Margin="10,36,1112,596" TextChanged="userName_TextChanged"/>
-                        <ListBox x:Name="userIDList" HorizontalAlignment="Left" Height="155" Margin="10,70,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="userId_SelectionChanged"/>
-                        <Label Content="User Information" HorizontalAlignment="Left" Margin="204,5,0,0" VerticalAlignment="Top"/>
-                        <Label Content="Name:" HorizontalAlignment="Left" Margin="204,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="nameTextbox" TextWrapping="Wrap" Text="TextBox" Margin="248,31,866,602" IsReadOnly="True"/>
-                        <Label Content="Stars:" HorizontalAlignment="Left" Margin="204,64,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="starsTextbox" TextWrapping="Wrap" Text="0" Margin="239,67,949,568" IsReadOnly="True"/>
-                        <Label Content="Fans:" HorizontalAlignment="Left" Margin="286,64,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="fansTextbox" TextWrapping="Wrap" Text="0" Margin="322,67,867,568" IsReadOnly="True"/>
-                        <Label Content="Yelping Since:" HorizontalAlignment="Left" Margin="204,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="yelpingTextbox" TextWrapping="Wrap" Text="01/01/2000" Margin="286,98,867,536" IsReadOnly="True"/>
-                        <Label Content="Votes:" HorizontalAlignment="Left" Margin="204,127,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <Label Content="Funny:" HorizontalAlignment="Left" Margin="246,127,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <Label Content="Cool:" HorizontalAlignment="Left" Margin="286,128,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <Label Content="Useful:" HorizontalAlignment="Left" Margin="322,127,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="funnyVotes" TextWrapping="Wrap" Text="0" Margin="248,154,949,484" RenderTransformOrigin="0.632,0" IsReadOnly="True"/>
-                        <TextBox x:Name="coolVotes" TextWrapping="Wrap" Text="0" Margin="286,154,911,484" IsReadOnly="True"/>
-                        <TextBox x:Name="usefulVotes" TextWrapping="Wrap" Text="0" Margin="324,154,873,484" RenderTransformOrigin="0.526,1" IsReadOnly="True"/>
-                        <Label Content="Tip Count:" HorizontalAlignment="Left" Margin="204,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="tipCount" TextWrapping="Wrap" Text="0" Margin="296,182,888,456" IsReadOnly="True"/>
-                        <Label Content="Total Tip Likes:" HorizontalAlignment="Left" Margin="204,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="tipLikes" TextWrapping="Wrap" Text="0" Margin="296,211,888,427" IsReadOnly="True"/>
-                        <Label Content="Location:" HorizontalAlignment="Left" Margin="204,230,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <Label Content="Lat:" HorizontalAlignment="Left" Margin="220,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="latitude" TextWrapping="Wrap" Text="" Margin="262,256,913,382" IsReadOnly="True"/>
-                        <Label Content="Long:" HorizontalAlignment="Left" Margin="220,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <TextBox x:Name="longitude" TextWrapping="Wrap" Text="" Margin="262,288,913,350" RenderTransformOrigin="0.431,1.087" IsReadOnly="True"/>
-                        <Button x:Name="editLocation" Content="Edit" HorizontalAlignment="Left" Margin="345,258,0,0" VerticalAlignment="Top" Height="18" Width="39" Click="Button_Click" RenderTransformOrigin="0.462,1.556"/>
-                        <Button x:Name="Update" Content="Update" HorizontalAlignment="Left" Margin="345,291,0,0" VerticalAlignment="Top" Height="20" Width="46" Click="Button_Click" RenderTransformOrigin="0.5,1.2"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="38*"/>
+                            <ColumnDefinition Width="273*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Set Current User" HorizontalAlignment="Right" Margin="0,10,36,0" VerticalAlignment="Top" Height="32" RenderTransformOrigin="0.464,-0.797"/>
+                        <TextBox x:Name="userName" TextWrapping="Wrap" Text="TextBox" Margin="10,36,20,596" TextChanged="userName_TextChanged"/>
+                        <ListBox x:Name="userIDList" HorizontalAlignment="Left" Height="155" Margin="10,70,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="userId_SelectionChanged" Grid.ColumnSpan="2"/>
+                        <Label Content="User Information" HorizontalAlignment="Left" Margin="52,5,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+                        <Label Content="Name:" HorizontalAlignment="Left" Margin="52,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="nameTextbox" TextWrapping="Wrap" Text="TextBox" Margin="96,31,866,602" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Stars:" HorizontalAlignment="Left" Margin="52,64,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="starsTextbox" TextWrapping="Wrap" Text="0" Margin="87,67,949,568" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Fans:" HorizontalAlignment="Left" Margin="134,64,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="fansTextbox" TextWrapping="Wrap" Text="0" Margin="170,67,867,568" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Yelping Since:" HorizontalAlignment="Left" Margin="52,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="yelpingTextbox" TextWrapping="Wrap" Text="01/01/2000" Margin="134,98,867,536" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Votes:" HorizontalAlignment="Left" Margin="52,127,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <Label Content="Funny:" HorizontalAlignment="Left" Margin="94,127,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <Label Content="Cool:" HorizontalAlignment="Left" Margin="134,128,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <Label Content="Useful:" HorizontalAlignment="Left" Margin="170,127,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="funnyVotes" TextWrapping="Wrap" Text="0" Margin="96,154,949,484" RenderTransformOrigin="0.632,0" IsReadOnly="True" Grid.Column="1"/>
+                        <TextBox x:Name="coolVotes" TextWrapping="Wrap" Text="0" Margin="134,154,911,484" IsReadOnly="True" Grid.Column="1"/>
+                        <TextBox x:Name="usefulVotes" TextWrapping="Wrap" Text="0" Margin="172,154,873,484" RenderTransformOrigin="0.526,1" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Tip Count:" HorizontalAlignment="Left" Margin="52,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="tipCount" TextWrapping="Wrap" Text="0" Margin="144,182,888,456" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Total Tip Likes:" HorizontalAlignment="Left" Margin="52,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="tipLikes" TextWrapping="Wrap" Text="0" Margin="144,211,888,427" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Location:" HorizontalAlignment="Left" Margin="52,230,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <Label Content="Lat:" HorizontalAlignment="Left" Margin="68,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="latitude" TextWrapping="Wrap" Text="" Margin="110,256,913,382" IsReadOnly="True" Grid.Column="1"/>
+                        <Label Content="Long:" HorizontalAlignment="Left" Margin="68,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <TextBox x:Name="longitude" TextWrapping="Wrap" Text="" Margin="110,288,913,350" RenderTransformOrigin="0.431,1.087" IsReadOnly="True" Grid.Column="1"/>
+                        <Button x:Name="editLocation" Content="Edit" HorizontalAlignment="Left" Margin="193,258,0,0" VerticalAlignment="Top" Height="18" Width="39" Click="Button_Click" RenderTransformOrigin="0.462,1.556" Grid.Column="1"/>
+                        <Button x:Name="Update" Content="Update" HorizontalAlignment="Left" Margin="193,291,0,0" VerticalAlignment="Top" Height="20" Width="46" Click="Button_Click" RenderTransformOrigin="0.5,1.2" Grid.Column="1"/>
                         <Label Content="Friends" HorizontalAlignment="Left" Margin="10,303,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <DataGrid x:Name="friendsGrid" HorizontalAlignment="Left" Height="317" Margin="10,334,0,0" VerticalAlignment="Top" Width="381" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-                        <Label Content="Latest tips from friends" HorizontalAlignment="Left" Margin="416,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
-                        <DataGrid x:Name="tipsListGrid" HorizontalAlignment="Left" Height="609" Margin="416,42,0,0" VerticalAlignment="Top" Width="809" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                        <DataGrid x:Name="friendsGrid" HorizontalAlignment="Left" Height="317" Margin="10,334,0,0" VerticalAlignment="Top" Width="381" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2"/>
+                        <Label Content="Latest tips from friends" HorizontalAlignment="Left" Margin="264,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1"/>
+                        <DataGrid x:Name="tipsListGrid" HorizontalAlignment="Left" Height="609" Margin="264,42,0,0" VerticalAlignment="Top" Width="809" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Column="1"/>
                     </Grid>
                 </TabItem>
                 <TabItem>
@@ -72,13 +76,18 @@
                         <ListBox x:Name="zipcodeList" HorizontalAlignment="Left" Height="60" Margin="20,234,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="zipcodeList_SelectionChanged"/>
                         <Label Content="Business Category" HorizontalAlignment="Left" Margin="20,299,0,0" VerticalAlignment="Top"/>
                         <ListBox x:Name="businessCategoryList" HorizontalAlignment="Left" Height="159" Margin="20,330,0,0" VerticalAlignment="Top" Width="162"/>
-                        <DataGrid x:Name="businessDataGrid" HorizontalAlignment="Left" Height="298" Margin="207,68,0,0" VerticalAlignment="Top" Width="665" ScrollViewer.HorizontalScrollBarVisibility="Visible"/>
+                        <DataGrid x:Name="businessDataGrid" HorizontalAlignment="Left" Height="298" Margin="207,68,0,0" VerticalAlignment="Top" Width="665" ScrollViewer.HorizontalScrollBarVisibility="Visible" SelectionChanged="businessDataGrid_SelectionChanged"/>
                         <Label Content="SEARCH RESULTS" HorizontalAlignment="Left" Margin="207,34,0,0" VerticalAlignment="Top"/>
                         <Button x:Name="searchBusinesses" Content="Search Businesses" HorizontalAlignment="Left" Margin="20,610,0,0" VerticalAlignment="Top" Width="162" Click="searchBusinessesButton_Click"/>
                         <Button x:Name="addCategoryFilter" Content="Add" HorizontalAlignment="Left" Margin="20,494,0,0" VerticalAlignment="Top" Width="75" Click="addCategoryFilter_Click"/>
                         <Button x:Name="removeCategoryFilter" Content="Remove" HorizontalAlignment="Left" Margin="107,494,0,0" VerticalAlignment="Top" Width="75" Click="removeCategoryFilter_Click"/>
                         <ListBox x:Name="categoryFilterList" HorizontalAlignment="Left" Height="81" Margin="20,518,0,0" VerticalAlignment="Top" Width="162"/>
                         <Button x:Name="TipsButton" Content="Tips" HorizontalAlignment="Left" Margin="782,387,0,0" VerticalAlignment="Top" Height="45" Width="90" Click="Button_Click"/>
+                        <Label x:Name="selectedBusinessLabel" Content="Selected Business" HorizontalAlignment="Left" Margin="207,375,0,0" VerticalAlignment="Top" FontWeight="Bold" FontStyle="Normal" Foreground="Black"/>
+                        <Label x:Name="selectedNameLabel" Content="" HorizontalAlignment="Left" Margin="207,409,0,0" VerticalAlignment="Top" Width="536" Background="#FF109FC5"/>
+                        <Label x:Name="selectedAddressLabel" Content="" HorizontalAlignment="Left" Margin="207,442,0,0" VerticalAlignment="Top" Width="536" Background="#FF109FC5"/>
+                        <Label x:Name="selectedHoursLabel" Content="" HorizontalAlignment="Left" Margin="207,476,0,0" VerticalAlignment="Top" Width="536" Background="#FF0FACD4"/>
+                        <Button x:Name="checkInsButton" Content="Check-ins" HorizontalAlignment="Left" Margin="782,455,0,0" VerticalAlignment="Top" Height="49" Width="90" Click="checkInsButton_Click"/>
                     </Grid>
                 </TabItem>
             </TabControl>
