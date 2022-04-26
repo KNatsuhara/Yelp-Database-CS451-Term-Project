@@ -20,6 +20,8 @@ namespace FancyFriendsYelpApp_v1
     /// </summary>
     public partial class CheckInsWindow : Window
     {
+        public Dictionary<string, int> months = new Dictionary<string, int>();
+
         public class CheckInEntry
         {
             public string month { get; set; }
@@ -75,8 +77,9 @@ namespace FancyFriendsYelpApp_v1
         {
             //// test bid: gnKjwL_1w79qoiV3IC_xQQ
             //string sqlstr = $"SELECT tip_time,first_name,likes,tip_text FROM Tip,Users WHERE Tip.business_id = '{bid.ToString()}' AND Tip.user_id = Users.user_id";
-            string sqlstr = $"SELECT month,Count(check_in_time) FROM check_in WHERE business_id = '{bid.ToString()}' GROUP BY month ORDER BY month";
+            string sqlstr = $"SELECT check_in_time FROM check_in WHERE business_id = '{bid.ToString()}'";
             executeQuery(sqlstr, populateCheckinsGrid);
+            dictionaryToGrid();
         }
 
         private void populateCheckinsGrid(NpgsqlDataReader R)
@@ -84,7 +87,22 @@ namespace FancyFriendsYelpApp_v1
             //System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(R.GetInt32(0))
             //tipsGrid.Items.Add(new Tip() { date = R.GetString(0), user_name = R.GetString(1), likes = R.GetInt32(2), text = R.GetString(3) });
             //Console.WriteLine("month: " + R.GetString(0) + " and corresponding count: " + R.GetInt32(1));
-            checkinsGrid.Items.Add(new CheckInEntry() {month = R.GetString(0), checkin_count = (R.GetInt32(1).ToString())});
+            string date = R.GetDateTime(0).ToString();
+            var datetime = DateTime.Parse(date);
+            string month = datetime.Month.ToString("d2");
+            if (!months.ContainsKey(month))
+            {
+                months[month] = 0;
+            }
+            months[month]++;
+        }
+
+        private void dictionaryToGrid()
+        {
+            foreach (KeyValuePair<string, int> month in months.OrderBy(key => key.Key))
+            {
+                checkinsGrid.Items.Add(new CheckInEntry() { month = month.Key, checkin_count = month.Value.ToString() });
+            }
         }
 
         private void addColumns2Grid()

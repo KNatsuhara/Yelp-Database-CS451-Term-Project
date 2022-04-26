@@ -294,7 +294,7 @@ namespace FancyFriendsYelpApp_v1
 
         private void addUserID(NpgsqlDataReader R)
         {
-            userIDList.Items.Add(R.GetString(0)); // Collect results from reader
+            userIDList?.Items?.Add(R.GetString(0)); // Collect results from reader
         }
 
         private void addCategoryFilterToList(string categoryName)

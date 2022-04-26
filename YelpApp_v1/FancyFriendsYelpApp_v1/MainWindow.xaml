@@ -21,7 +21,7 @@
                     </TabItem.Header>
                     <Grid>
                         <Label Content="Set Current User" HorizontalAlignment="Right" Margin="0,10,1128,0" VerticalAlignment="Top" Height="32" RenderTransformOrigin="0.464,-0.797"/>
-                        <TextBox x:Name="userName" TextWrapping="Wrap" Text="TextBox" Margin="10,36,1112,596" TextChanged="userName_TextChanged"/>
+                        <TextBox x:Name="userName" TextWrapping="Wrap" Text="Koji" Margin="10,36,1112,596" TextChanged="userName_TextChanged"/>
                         <ListBox x:Name="userIDList" HorizontalAlignment="Left" Height="155" Margin="10,70,0,0" VerticalAlignment="Top" Width="162" SelectionChanged="userId_SelectionChanged"/>
                         <Label Content="User Information" HorizontalAlignment="Left" Margin="204,5,0,0" VerticalAlignment="Top"/>
                         <Label Content="Name:" HorizontalAlignment="Left" Margin="204,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654"/>
