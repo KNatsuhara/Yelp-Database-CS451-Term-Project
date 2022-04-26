@@ -3,13 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FancyFriendsYelpApp_v1"
+        xmlns:local="clr-namespace:Wpf.CartesianChart.Basic_Bars"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="CheckInsWindow" Height="450" Width="800">
-    <Grid>
-        <DataGrid x:Name="checkinsGrid" Margin="10,53,173,10"/>
+        Title="CheckInsWindow" Height="467.467" Width="800" d:DesignWidth="300" d:DataContext="{d:DesignInstance local:BasicColumn}">
+    <Grid Margin="0,0,0,82">
+        <DataGrid x:Name="checkinsGrid" Margin="589,111,10,-69"/>
         <Label x:Name="Check_in_label" Content="Number of Check-ins per Month" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
         <Button x:Name="checkInButton" Content="Check-in" HorizontalAlignment="Left" Margin="663,53,0,0" VerticalAlignment="Top" Height="53" Width="105" Click="checkInButton_Click"/>
-
+        <lvc:CartesianChart Series="{Binding SeriesCollection}" Margin="10,74,208,-69">
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="Months" Labels="{Binding Labels}"></lvc:Axis>
+            </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Check Ins" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
     </Grid>
 </Window>
