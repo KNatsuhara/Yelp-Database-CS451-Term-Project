@@ -299,7 +299,7 @@ namespace FancyFriendsYelpApp_v1
 
         private void addUserID(NpgsqlDataReader R)
         {
-            userIDList.Items.Add(R.GetString(0)); // Collect results from reader
+            userIDList?.Items?.Add(R.GetString(0)); // Collect results from reader
         }
 
         private void addCategoryFilterToList(string categoryName)
@@ -448,6 +448,7 @@ namespace FancyFriendsYelpApp_v1
             if (userIDList.SelectedIndex > -1)
             {
                 current_userid = userIDList.SelectedItem.ToString();//Dileep added
+                string sqlStr;
                 // User information section
                 sqlStr = $"SELECT first_name, last_name, average_stars, number_of_fans, date_joined, funny, cool, useful, total_tip_count, total_tip_likes, latitude, longitude " +
                     $"FROM Users " +
