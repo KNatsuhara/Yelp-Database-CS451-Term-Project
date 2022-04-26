@@ -476,6 +476,13 @@ namespace FancyFriendsYelpApp_v1
 
         private void searchBusinessesButton_Click(object sender, RoutedEventArgs e)
         {
+            // Checks if User is selected
+            if (userIDList.SelectedItem == null)
+            {
+                Console.WriteLine("Must select a user before searching!");
+                return;
+            }
+
             // businessDataGrid.SelectedIndex = -1;
             count = 0;
             businessDataGrid?.Items?.Clear(); // Clears business Grid
