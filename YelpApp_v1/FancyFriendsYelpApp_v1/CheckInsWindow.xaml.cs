@@ -35,7 +35,7 @@ namespace FancyFriendsYelpApp_v1
         }
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = YOUR_PASS_HERE";
+            return $"Host = localhost; Username = postgres; Database = fancyfriendsdb; password = {Globals.PASSWORD}";
         }
         private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
         {

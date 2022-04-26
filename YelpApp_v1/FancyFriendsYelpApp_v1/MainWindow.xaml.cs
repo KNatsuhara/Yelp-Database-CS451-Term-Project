@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,10 @@ using Npgsql;
 
 namespace FancyFriendsYelpApp_v1
 {
+    public static class Globals
+    {
+        public static readonly String PASSWORD = "IglooZone1234$";
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -69,7 +74,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = YOUR_PASS_HERE";
+            return $"Host = localhost; Username = postgres; Database = fancyfriendsdb; password = {Globals.PASSWORD}";
         }
 
         private void addState()
@@ -438,6 +443,7 @@ namespace FancyFriendsYelpApp_v1
             friendsGrid.Items.Clear(); // Clears friend list when switching to another user [prevents appending]
             tipsListGrid.Items.Clear(); // Clears recent tips from friends when new user "logs in"
             ClearAllUserData();
+            string sqlStr = "";
 
             if (userIDList.SelectedIndex > -1)
             {
@@ -490,7 +496,7 @@ namespace FancyFriendsYelpApp_v1
                     {
                         sqlStr += $"'{newFilter}') ";
                     }
-                    else if (categoryFilterList.Items.Count-1 == categoryFilterList.Items.IndexOf(filter)) // The last filter
+                    else if (categoryFilterList.Items.Count - 1 == categoryFilterList.Items.IndexOf(filter)) // The last filter
                     {
                         sqlStr += $"'{newFilter}')";
                     }
@@ -505,7 +511,7 @@ namespace FancyFriendsYelpApp_v1
                 sqlStr = $"Select business_id, name, num_checkins, stars, num_tips, state, city, zip_code, is_open, latitude, longitude, address FROM business WHERE business.zip_code = {zipcodeList.SelectedItem} AND business.state = '{stateList.SelectedItem.ToString()}' AND business.city = '{cityList.SelectedItem.ToString()}'";
             }
 
-            if (zipcodeList.SelectedIndex > -1 && ((bool)checkBoxPrice1.IsChecked || (bool)checkBoxPrice2.IsChecked || 
+            if (zipcodeList.SelectedIndex > -1 && ((bool)checkBoxPrice1.IsChecked || (bool)checkBoxPrice2.IsChecked ||
                 (bool)checkBoxPrice3.IsChecked || (bool)checkBoxPrice4.IsChecked))
             {
                 sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id AND attribute.name = 'RestaurantsPriceRange2'";
@@ -700,6 +706,8 @@ namespace FancyFriendsYelpApp_v1
                 sqlStr += $"GROUP BY Business.business_id HAVING COUNT(Business.business_id) = {categoryFilterList.Items.Count}";
             }
 
+            bool sortNearest = false;
+
             if (zipcodeList.SelectedIndex > -1)
             {
                 if (sortResultsComboBox.SelectedItem == sortByName)
@@ -720,13 +728,39 @@ namespace FancyFriendsYelpApp_v1
                 }
                 else if (sortResultsComboBox.SelectedItem == sortByDistance)
                 {
-                    sqlStr += "ORDER BY business.longitude"; // NEED TO FIX DISTANCE
+                    sortNearest = true;
                 }
 
                 Console.WriteLine(sqlStr);
                 executeQuery(sqlStr, addGridRow);
                 numBusinessLabel.Content = count; // Output the number of businesses found from the query
+
+
+                if (sortNearest)
+                {
+                    SortDataGrid(businessDataGrid);
+                }
             }
+        }
+        public static void SortDataGrid(DataGrid dataGrid, int columnIndex = 4, ListSortDirection sortDirection = ListSortDirection.Ascending)
+        {
+            var column = dataGrid.Columns[columnIndex];
+
+            // Clear current sort descriptions
+            dataGrid.Items.SortDescriptions.Clear();
+
+            // Add the new sort description
+            dataGrid.Items.SortDescriptions.Add(new SortDescription(column.SortMemberPath, sortDirection));
+
+            // Apply sort
+            foreach (var col in dataGrid.Columns)
+            {
+                col.SortDirection = null;
+            }
+            column.SortDirection = sortDirection;
+
+            // Refresh items to display sort
+            dataGrid.Items.Refresh();
         }
 
         private void addCategoryFilter_Click(object sender, RoutedEventArgs e)
@@ -879,7 +913,34 @@ namespace FancyFriendsYelpApp_v1
                 string sqlstr = $"SELECT open_time,closing_time FROM hours WHERE business_id = '{B.business_id}' AND day = '{current_day.ToString()}'";
                 executeQuery(sqlstr, addSelectedHoursLabel);
 
+                businessDetailsListBox.Items.Clear();
+                businessDetailsListBox.Items.Add("Categories:");
+                string categoryDetails = createBusinessDetailQueryCategory();
+                executeQuery(categoryDetails, addBusinessDetails);
+                businessDetailsListBox.Items.Add("Attributes:");
+                string attributeDetails = createBusinessDetailQueryAttribute();
+                executeQuery(attributeDetails, addBusinessDetails);
+
             }
+        }
+
+        private string createBusinessDetailQueryCategory()
+        {
+            Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+            Console.WriteLine(B.business_id); // AND business.business.id = '{B.business_id}'
+            string sqlStr = $"Select distinct category.name FROM business, category WHERE business.zip_code = {zipcodeList.SelectedItem} AND business.state = '{stateList.SelectedItem.ToString()}' AND business.city = '{cityList.SelectedItem.ToString()}' AND business.business_id = category.business_id AND business.business_id = '{B.business_id.ToString()}' ORDER BY category.name";
+            return sqlStr;        
+        }
+
+        private string createBusinessDetailQueryAttribute()
+        {
+            Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+            string sqlStr = $"Select distinct attribute.name FROM business, attribute WHERE business.zip_code = {zipcodeList.SelectedItem} AND business.state = '{stateList.SelectedItem.ToString()}' AND business.city = '{cityList.SelectedItem.ToString()}' AND business.business_id = attribute.business_id AND business.business_id = '{B.business_id.ToString()}' AND (attribute.value = 'True' OR attribute.value = 'free') ORDER BY attribute.name";
+            return sqlStr;
+        }
+        private void addBusinessDetails(NpgsqlDataReader R)
+        {
+            businessDetailsListBox.Items.Add("  " + R.GetString(0)); // Collect results from reader
         }
 
         private void addSelectedHoursLabel(NpgsqlDataReader R)
