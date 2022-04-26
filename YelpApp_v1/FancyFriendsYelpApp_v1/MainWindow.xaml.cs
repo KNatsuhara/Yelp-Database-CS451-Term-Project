@@ -443,7 +443,6 @@ namespace FancyFriendsYelpApp_v1
             friendsGrid.Items.Clear(); // Clears friend list when switching to another user [prevents appending]
             tipsListGrid.Items.Clear(); // Clears recent tips from friends when new user "logs in"
             ClearAllUserData();
-            string sqlStr = "";
 
             if (userIDList.SelectedIndex > -1)
             {
@@ -476,8 +475,9 @@ namespace FancyFriendsYelpApp_v1
 
         private void searchBusinessesButton_Click(object sender, RoutedEventArgs e)
         {
+            businessDataGrid.SelectedIndex = -1;
             count = 0;
-            businessDataGrid.Items.Clear(); // Clears business Grid
+            businessDataGrid?.Items?.Clear(); // Clears business Grid
             string sqlStr = "";
 
             if (categoryFilterList.Items.Count > 0 && zipcodeList.SelectedIndex > -1)
@@ -921,7 +921,6 @@ namespace FancyFriendsYelpApp_v1
                 businessDetailsListBox.Items.Add("Attributes:");
                 string attributeDetails = createBusinessDetailQueryAttribute();
                 executeQuery(attributeDetails, addBusinessDetails);
-
             }
         }
 
