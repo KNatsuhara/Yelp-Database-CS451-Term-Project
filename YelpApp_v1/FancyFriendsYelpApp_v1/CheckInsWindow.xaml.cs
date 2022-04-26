@@ -11,7 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LiveCharts;
+using LiveCharts.Wpf;
 using Npgsql;
+using Wpf.CartesianChart.Basic_Bars;
 
 namespace FancyFriendsYelpApp_v1
 {
@@ -21,6 +24,7 @@ namespace FancyFriendsYelpApp_v1
     public partial class CheckInsWindow : Window
     {
         public Dictionary<string, int> months = new Dictionary<string, int>();
+        BasicColumn column;
 
         public class CheckInEntry
         {
@@ -34,7 +38,34 @@ namespace FancyFriendsYelpApp_v1
             addColumns2Grid();
             this.bid = bid;
             getCheckins(bid);
+
+            var monthsTuples = months.Select(x => new Tuple<string, int>(x.Key, x.Value)).ToList();
+            monthsTuples.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+            List<string> k = new List<string>();
+            List<int> v = new List<int>();
+
+            foreach (var item in monthsTuples)
+            {
+                k.Add(item.Item1);
+                v.Add(item.Item2);
+            }
+
+            column = new BasicColumn();
+            column.SeriesCollection = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Title = "2015",
+                    Values = new ChartValues<int> (v)
+                }
+            };
+
+            column.Labels = k.ToArray();
+            column.Formatter = value => value.ToString("N");
+
+            DataContext = column;
         }
+
         private string buildConnectionString()
         {
             return $"Host = localhost; Username = postgres; Database = fancyfriendsdb; password = {Globals.PASSWORD}";
@@ -116,7 +147,7 @@ namespace FancyFriendsYelpApp_v1
 
             DataGridTextColumn col2 = new DataGridTextColumn();
             col2.Binding = new Binding("checkin_count");
-            col2.Header = "Number of Check-ins";
+            col2.Header = "Check-ins";
             col2.Width = 70;
             checkinsGrid.Columns.Add(col2);
 

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Npgsql;
+using Wpf.CartesianChart.Basic_Bars;
 
 namespace FancyFriendsYelpApp_v1
 {
