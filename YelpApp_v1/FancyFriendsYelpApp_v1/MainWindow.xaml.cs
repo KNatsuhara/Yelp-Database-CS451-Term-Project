@@ -56,6 +56,8 @@ namespace FancyFriendsYelpApp_v1
             public string date_joined { get; set; }
         }
 
+        public string current_userid { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -359,6 +361,7 @@ namespace FancyFriendsYelpApp_v1
 
             if (userIDList.SelectedIndex > -1)
             {
+                current_userid = userIDList.SelectedItem.ToString();//Dileep added
                 string sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
                     $"FROM Users, Friends " +
                     $"WHERE Friends.user_id = '{userIDList.SelectedItem.ToString()}' " +
@@ -471,7 +474,7 @@ namespace FancyFriendsYelpApp_v1
                 Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
                 if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
                 {
-                    TipsWindow tips_window = new TipsWindow(B.business_id.ToString());
+                    TipsWindow tips_window = new TipsWindow(B.business_id.ToString(), current_userid);
                     tips_window.Show();
                 }
             }
