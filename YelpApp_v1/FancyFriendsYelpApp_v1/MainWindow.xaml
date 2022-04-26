@@ -120,7 +120,7 @@
                         </GroupBox>
                         <GroupBox Header="Sort Results By:" Margin="870.5,333,0,0" FontStyle="Normal" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1">
                             <StackPanel>
-                                <ComboBox x:Name="sortResultsComboBox" Height="35" SelectedIndex="0">
+                                <ComboBox x:Name="sortResultsComboBox" Height="35" SelectedIndex="0" SelectionChanged="sortResultsComboBox_SelectionChanged_1">
                                     <ComboBoxItem x:Name="sortByName" Content="Business Name (Default)"></ComboBoxItem>
                                     <ComboBoxItem x:Name="sortByRating" Content="Highest rating (stars)"></ComboBoxItem>
                                     <ComboBoxItem x:Name="sortByTips" Content="Most number of tips"></ComboBoxItem>

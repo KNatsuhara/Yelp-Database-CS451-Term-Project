@@ -20,7 +20,7 @@ namespace FancyFriendsYelpApp_v1
 {
     public static class Globals
     {
-        public static readonly String PASSWORD = "IglooZone1234$";
+        public static readonly String PASSWORD = "YOUR PASS HERE";
     }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -444,6 +444,7 @@ namespace FancyFriendsYelpApp_v1
             friendsGrid.Items.Clear(); // Clears friend list when switching to another user [prevents appending]
             tipsListGrid.Items.Clear(); // Clears recent tips from friends when new user "logs in"
             ClearAllUserData();
+            businessDataGrid.Items.Clear();
 
             if (userIDList.SelectedIndex > -1)
             {
@@ -824,6 +825,7 @@ namespace FancyFriendsYelpApp_v1
         {
             try
             {
+                businessDataGrid.Items.Clear();
                 double user_lat = 0;
                 user_lat = Convert.ToDouble(latitude.Text);
                 double user_long = 0;
@@ -986,6 +988,11 @@ namespace FancyFriendsYelpApp_v1
                     tips_window.Show();
                 }
             }
+        }
+
+        private void sortResultsComboBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            businessDataGrid.Items.Clear();
         }
     }
 }
