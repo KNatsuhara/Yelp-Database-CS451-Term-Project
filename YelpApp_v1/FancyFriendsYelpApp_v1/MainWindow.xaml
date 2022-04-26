@@ -51,7 +51,7 @@
                         <CheckBox x:Name="checkBoxPrice2" Content="$$" Width="100" Margin="984,90,153.6,543.8" RenderTransformOrigin="0.872,0.422" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                         <CheckBox x:Name="checkBoxPrice4" Content="$$$$" Width="100" Margin="1084,90,53.6,543.8" RenderTransformOrigin="0.872,0.422" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                         <CheckBox x:Name="checkBoxPrice3" Content="$$$" Width="100" Margin="1083,63,54.6,570.8" RenderTransformOrigin="0.872,0.422" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                        <GroupBox x:Name="filterByAttributesList" Header="Filter by Attributes:" Margin="911,122,153.6,332.8" FontStyle="Normal" VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <GroupBox x:Name="filterByAttributesList" Header="Filter by Attributes:" Margin="911,122,0,0" FontStyle="Normal" VerticalAlignment="Top" HorizontalAlignment="Left" Height="206">
                             <StackPanel Margin="0,0,-0.2,-51.4" VerticalAlignment="Top" HorizontalAlignment="Left">
                                 <CheckBox x:Name="acceptsCreditCard" Content="Accepts Credit Card" FontStyle="Normal" VerticalAlignment="Top" HorizontalAlignment="Left"></CheckBox>
                                 <CheckBox x:Name="takesReservations" Content="Takes Reservations" FontStyle="Normal" VerticalAlignment="Top" HorizontalAlignment="Left"></CheckBox>
