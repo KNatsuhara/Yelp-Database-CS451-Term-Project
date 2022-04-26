@@ -29,7 +29,6 @@ namespace FancyFriendsYelpApp_v1
             public string state { get; set; }
             public string city { get; set; }
             public string address { get; set; }
-            public double distance { get; set; }
             public int num_checkins { get; set; }
             public int num_tips { get; set; }
             public int stars { get; set; }
@@ -37,6 +36,7 @@ namespace FancyFriendsYelpApp_v1
             public bool is_open { get; set; }
             public double latitude { get; set; }
             public double longitude { get; set; }
+            public double distance { get; set; }
         }
 
         public class Tip
@@ -164,7 +164,7 @@ namespace FancyFriendsYelpApp_v1
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Binding = new Binding("first_name");
             col1.Header = "Name";
-            col1.Width = 115;
+            col1.Width = 75;
             friendsGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
@@ -176,13 +176,13 @@ namespace FancyFriendsYelpApp_v1
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Binding = new Binding("average_stars");
             col3.Header = "AvgStars";
-            col3.Width = 75;
+            col3.Width = 65;
             friendsGrid.Columns.Add(col3);
 
             DataGridTextColumn col4 = new DataGridTextColumn();
             col4.Binding = new Binding("date_joined");
             col4.Header = "Yelping Since";
-            col4.Width = 150;
+            col4.Width = 80;
             friendsGrid.Columns.Add(col4);
         }
 
@@ -191,34 +191,35 @@ namespace FancyFriendsYelpApp_v1
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Binding = new Binding("user_name");
             col1.Header = "User Name";
-            col1.Width = 225;
+            col1.Width = 100;
             tipsListGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
             col2.Binding = new Binding("business");
             col2.Header = "Business";
-            col2.Width = 175;
+            col2.Width = 200;
             tipsListGrid.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Binding = new Binding("city");
             col3.Header = "City";
-            col3.Width = 100;
+            col3.Width = 75;
             tipsListGrid.Columns.Add(col3);
 
             DataGridTextColumn col4 = new DataGridTextColumn();
             col4.Binding = new Binding("text");
             col4.Header = "Text";
-            col4.Width = 50;
+            col4.Width = 300;
             tipsListGrid.Columns.Add(col4);
 
             DataGridTextColumn col5 = new DataGridTextColumn();
             col5.Binding = new Binding("date");
             col5.Header = "Date";
-            col5.Width = 50;
+            col5.Width = 65;
             tipsListGrid.Columns.Add(col5);
         }
 
+        // executes SELECT queries
         private void executeQuery(string sqlstr, Action<NpgsqlDataReader> myf)
         {
             using (var connection = new NpgsqlConnection(buildConnectionString()))
@@ -235,6 +236,33 @@ namespace FancyFriendsYelpApp_v1
                         {
                             myf(reader);
                         }
+                    }
+                    catch (NpgsqlException ex) // Catches any mistakes in the query
+                    {
+                        Console.WriteLine(ex.Message.ToString()); // Displays error message
+                        System.Windows.MessageBox.Show("SQL Error - " + ex.Message.ToString());
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+        }
+
+        // executes UPDATES, INSERTS, DELETES queries
+        private void executeUpdate(string sqlstr)
+        {
+            using (var connection = new NpgsqlConnection(buildConnectionString()))
+            {
+                connection.Open();
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = sqlstr;
+                    try
+                    {
+                        var reader = cmd.ExecuteNonQuery(); // Execute Query
                     }
                     catch (NpgsqlException ex) // Catches any mistakes in the query
                     {
@@ -282,11 +310,47 @@ namespace FancyFriendsYelpApp_v1
         // Inserts Business Data into businessDataGrid
         private void addGridRow(NpgsqlDataReader R)
         {
-            businessDataGrid.Items.Add(new Business() { business_id = R.GetString(0), name = R.GetString(1), num_checkins = R.GetInt32(2), 
-                stars = R.GetInt32(3), num_tips = R.GetInt32(4), state = R.GetString(5), city = R.GetString(6), zip_code = R.GetInt32(7), 
-                is_open = R.GetBoolean(8), latitude = R.GetDouble(9), longitude = R.GetDouble(10), address  = R.GetString(11) }); // Collect results from reader
+            businessDataGrid.Items.Add(new Business()
+            {
+                business_id = R.GetString(0),
+                name = R.GetString(1),
+                num_checkins = R.GetInt32(2),
+                stars = R.GetInt32(3),
+                num_tips = R.GetInt32(4),
+                state = R.GetString(5),
+                city = R.GetString(6),
+                zip_code = R.GetInt32(7),
+                is_open = R.GetBoolean(8),
+                latitude = R.GetDouble(9),
+                longitude = R.GetDouble(10),
+                address = R.GetString(11),
+                distance = haversine(R.GetDouble(9), R.GetDouble(10), Convert.ToDouble(latitude.Text), Convert.ToDouble(longitude.Text))
+            }); // Collect results from reader
             count += 1;
             Console.WriteLine(count);
+        }
+
+        private double haversine(double lat1, double lon1,
+            double lat2, double lon2)
+        {
+            // distance between latitudes and longitudes
+            double dLat = (Math.PI / 180) * (lat2 - lat1);
+            double dLon = (Math.PI / 180) * (lon2 - lon1);
+
+            // convert to radians
+            lat1 = (Math.PI / 180) * (lat1);
+            lat2 = (Math.PI / 180) * (lat2);
+
+            // apply formula
+            double a = Math.Pow(Math.Sin(dLat / 2), 2) +
+                        Math.Pow(Math.Sin(dLon / 2), 2) *
+                        Math.Cos(lat1) * Math.Cos(lat2);
+            double rad = 6371;
+            double c = 2 * Math.Asin(Math.Sqrt(a));
+            double kilometers = rad * c;
+
+            // return miles cause we're american
+            return kilometers / 1.609;
         }
 
         // Inserts Friends Data into friendsDataGrid
@@ -316,6 +380,21 @@ namespace FancyFriendsYelpApp_v1
             }); // Collect results from reader
             count += 1;
             Console.WriteLine(count);
+        }
+
+        private void addUserInformation(NpgsqlDataReader R)
+        {
+            nameTextbox.Text = (R.GetString(0) + " " + R.GetString(1)).Trim();
+            starsTextbox.Text = R.GetDouble(2).ToString();
+            fansTextbox.Text = R.GetInt32(3).ToString();
+            yelpingTextbox.Text = R.GetDate(4).ToString();
+            funnyVotes.Text = R.GetInt32(5).ToString();
+            coolVotes.Text = R.GetInt32(6).ToString();
+            usefulVotes.Text = R.GetInt32(7).ToString();
+            tipCount.Text = R.GetInt32(8).ToString();
+            tipLikes.Text = R.GetInt32(9).ToString();
+            latitude.Text = R.GetDouble(10).ToString();
+            longitude.Text = R.GetDouble(11).ToString();
         }
 
         private void stateList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -358,16 +437,25 @@ namespace FancyFriendsYelpApp_v1
         {
             friendsGrid.Items.Clear(); // Clears friend list when switching to another user [prevents appending]
             tipsListGrid.Items.Clear(); // Clears recent tips from friends when new user "logs in"
+            ClearAllUserData();
 
             if (userIDList.SelectedIndex > -1)
             {
                 current_userid = userIDList.SelectedItem.ToString();//Dileep added
-                string sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
+                // User information section
+                sqlStr = $"SELECT first_name, last_name, average_stars, number_of_fans, date_joined, funny, cool, useful, total_tip_count, total_tip_likes, latitude, longitude " +
+                    $"FROM Users " +
+                    $"WHERE user_id = '{userIDList.SelectedItem}';";
+                executeQuery(sqlStr, addUserInformation);
+
+                // Friends grid
+                sqlStr = $"SELECT DISTINCT Users.first_name, Users.total_tip_likes, Users.average_stars, Users.date_joined " +
                     $"FROM Users, Friends " +
                     $"WHERE Friends.user_id = '{userIDList.SelectedItem.ToString()}' " +
                     $"AND Users.user_id = Friends.user_id2";
                 executeQuery(sqlStr, addFriendsGridRow);
 
+                // Latest tips grid
                 sqlStr = $"SELECT Users.first_name, Business.name, Business.city, TempTip.tip_text, TempTip.tip_time " +
                     $"FROM Users, Friends, Business," +
                     $"(SELECT DISTINCT ON(user_id) user_id, business_id, tip_time, tip_text FROM Tip ORDER BY user_id, tip_time DESC) AS TempTip " +
@@ -478,6 +566,27 @@ namespace FancyFriendsYelpApp_v1
                     tips_window.Show();
                 }
             }
+        }
+        private void updateUserLocation_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                double user_lat = 0;
+                user_lat = Convert.ToDouble(latitude.Text);
+                double user_long = 0;
+                user_long = Convert.ToDouble(longitude.Text);
+
+                string query =
+                        $"UPDATE Users " +
+                        $"SET latitude = {user_lat}, longitude = {user_long} " +
+                        $"WHERE user_id = '{userIDList.SelectedItem.ToString()}'";
+                executeUpdate(query);
+            }
+            catch
+            {
+                Console.WriteLine("A user has not been selected!\n");
+            }
+
         }
 
         private void userName_TextChanged(object sender, TextChangedEventArgs e)
