@@ -7,10 +7,12 @@
         mc:Ignorable="d"
         Title="TipsWindow" Height="475" Width="820">
     <Grid>
-        <DataGrid x:Name="tipsGrid" HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="660" Margin="27,103,0,0" MinColumnWidth="7" ColumnWidth="Auto" />
+        <DataGrid x:Name="tipsGrid" HorizontalAlignment="Left" Height="181" VerticalAlignment="Top" Width="660" Margin="27,103,0,0" MinColumnWidth="7" ColumnWidth="Auto" />
         <TextBox x:Name="tipTextBox" HorizontalAlignment="Left" Margin="27,25,0,0" TextWrapping="Wrap" Text="Add tip here!" VerticalAlignment="Top" Width="660" Height="41"/>
         <Button x:Name="addTipButton" Content="Add Tip" HorizontalAlignment="Left" Margin="704,25,0,0" VerticalAlignment="Top" Height="41" Width="81" Click="Button_Click"/>
         <Label x:Name="allTipsLabel" Content="All Tips!" HorizontalAlignment="Left" Margin="27,77,0,0" VerticalAlignment="Top" Width="361"/>
+        <Label Content="Friends who reviewed this business" HorizontalAlignment="Left" Margin="27,302,0,0" VerticalAlignment="Top"/>
+        <DataGrid x:Name="friendReviewsGrid" Margin="27,333,133,10"/>
 
     </Grid>
 </Window>
