@@ -833,6 +833,7 @@ namespace FancyFriendsYelpApp_v1
                         $"SET latitude = {user_lat}, longitude = {user_long} " +
                         $"WHERE user_id = '{userIDList.SelectedItem.ToString()}'";
                 executeUpdate(query);
+                Console.WriteLine("Updated User Location");
             }
             catch
             {

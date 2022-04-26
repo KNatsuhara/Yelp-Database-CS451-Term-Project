@@ -49,11 +49,10 @@
                         <TextBox x:Name="tipLikes" TextWrapping="Wrap" Text="0" Margin="103,211,0,0" IsReadOnly="True" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70" Height="18"/>
                         <Label Content="Location:" HorizontalAlignment="Left" Margin="16,233,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1" Height="26" Width="58"/>
                         <Label Content="Lat:" HorizontalAlignment="Left" Margin="16,256,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1" Height="26" Width="28"/>
-                        <TextBox x:Name="latitude" TextWrapping="Wrap" Text="" Margin="262,256,913,382" IsReadOnly="False"/>
+                        <TextBox x:Name="latitude" TextWrapping="Wrap" Text="" Margin="75,256,890,382" IsReadOnly="False" Grid.Column="1"/>
                         <Label Content="Long:" HorizontalAlignment="Left" Margin="19,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1" Height="26" Width="39"/>
-                        <TextBox x:Name="longitude" TextWrapping="Wrap" Text="" Margin="262,288,913,350" RenderTransformOrigin="0.431,1.087" IsReadOnly="False"/>
-                        <Button x:Name="editLocation" Content="Edit" HorizontalAlignment="Left" Margin="167,259,0,0" VerticalAlignment="Top" Height="18" Width="46" Click="Button_Click" RenderTransformOrigin="0.462,1.556" Grid.Column="1"/>
-                        <Button x:Name="Update" Content="Update" HorizontalAlignment="Left" Margin="167,288,0,0" VerticalAlignment="Top" Height="20" Width="46" Click="Button_Click" RenderTransformOrigin="0.5,1.2" Grid.Column="1"/>
+                        <TextBox x:Name="longitude" TextWrapping="Wrap" Text="" Margin="75,288,890,350" RenderTransformOrigin="0.431,1.087" IsReadOnly="False" Grid.Column="1"/>
+                        <Button x:Name="Update" Content="Update" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Height="20" Width="46" Click="updateUserLocation_Click" RenderTransformOrigin="0.5,1.2" Grid.Column="1"/>
                         <Label Content="Friends" HorizontalAlignment="Left" Margin="10,303,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Height="26" Width="48"/>
                         <DataGrid x:Name="friendsGrid" HorizontalAlignment="Left" Height="317" Margin="10,334,0,0" VerticalAlignment="Top" Width="381" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2"/>
                         <Label Content="Latest tips from friends" HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.44,1.654" Grid.Column="1" Height="26" Width="132"/>
