@@ -118,7 +118,7 @@ def parseBusinessData():
                 conn.commit()
 
             line = f.readline()
-            count_line +=1
+            count_line += 1
 
         cur.close()
         conn.close()
@@ -221,7 +221,7 @@ def checkinHelper(timestamp):
     month = list[1]
     day = list[2]
     time = list[3]
-    return year, month, day, time
+    return "{}-{}-{} {}".format(year, month, day, time)
 
 def parseCheckinData():
 
@@ -249,23 +249,20 @@ def parseCheckinData():
             business_id = cleanStr4SQL(data['business_id'])
 
             for date in checkins:
-                checkin = checkinHelper(date)   # checkin = list [(year, month, day, time)] ex: [('2010', '05', '02', '23:57:32')]
+                checkin = checkinHelper(date)   # checkin = '2015-05-14 18:58:05'
                 try:
-                    cur.execute("INSERT INTO Check_in (business_id, check_in_time, day, month, year)"
-                        + " VALUES (%s, %s, %s, %s, %s)",
+                    cur.execute("INSERT INTO Check_in (business_id, check_in_time)"
+                        + " VALUES (%s, %s)",
                         (
                             business_id,
-                            checkin[3],
-                            checkin[2],
-                            checkin[1],
-                            checkin[0]
+                            checkin
                         ))
                 except Exception as e:
                     print("Insert to Check_in TABLE failed!", e)
                 conn.commit()
 
             line = f.readline()
-            count_line +=1
+            count_line += 1
 
         cur.close()
         conn.close()
@@ -318,7 +315,7 @@ def parseTipData():
     f.close()
 
 if __name__ == "__main__":
-    parseBusinessData()
-    parseUserData()
+    # parseBusinessData()
+    # parseUserData()
     parseCheckinData()
-    parseTipData()
+    # parseTipData()
