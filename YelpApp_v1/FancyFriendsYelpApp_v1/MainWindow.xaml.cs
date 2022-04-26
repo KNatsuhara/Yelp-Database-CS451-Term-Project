@@ -47,7 +47,7 @@ namespace FancyFriendsYelpApp_v1
 
         private string buildConnectionString()
         {
-            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = YOUR PASS HERE";
+            return "Host = localhost; Username = postgres; Database = fancyfriendsdb; password = IglooZone1234$";
         }
 
         private void addState()
@@ -238,11 +238,13 @@ namespace FancyFriendsYelpApp_v1
 
         private void searchBusinessesButton_Click(object sender, RoutedEventArgs e)
         {
+            count = 0;
             businessDataGrid.Items.Clear(); // Clears business Grid
+            string sqlStr = "";
 
             if (categoryFilterList.Items.Count > 0 && zipcodeList.SelectedIndex > -1)
             {
-                string sqlStr = $"Select distinct business.business_id, business.name, num_checkins, stars, num_tips, state, city, zip_code, is_open, latitude, longitude, " +
+                sqlStr = $"Select distinct business.business_id, business.name, num_checkins, stars, num_tips, state, city, zip_code, is_open, latitude, longitude, " +
                     $"address FROM business, category " +
                     $"WHERE business.zip_code = {zipcodeList.SelectedItem} " +
                     $"AND business.state = '{stateList.SelectedItem.ToString()}' " +
@@ -266,18 +268,233 @@ namespace FancyFriendsYelpApp_v1
                         sqlStr += $"'{newFilter}', ";
                     }
                 }
-
-                // THIS WILL BREAK IF THE CATEGORY NAME CONTAINS AN APOSTROPHE
-                sqlStr += $"GROUP BY Business.business_id HAVING COUNT(Business.business_id) = {categoryFilterList.Items.Count} ORDER BY business.name";
-
-                Console.WriteLine(sqlStr);
-
-                executeQuery(sqlStr, addGridRow);
             }
             else if (zipcodeList.SelectedIndex > -1)
             {
-                string sqlStr = $"Select business_id, name, num_checkins, stars, num_tips, state, city, zip_code, is_open, latitude, longitude, address FROM business WHERE business.zip_code = {zipcodeList.SelectedItem} AND business.state = '{stateList.SelectedItem.ToString()}' AND business.city = '{cityList.SelectedItem.ToString()}' ORDER BY business.name";
+                sqlStr = $"Select business_id, name, num_checkins, stars, num_tips, state, city, zip_code, is_open, latitude, longitude, address FROM business WHERE business.zip_code = {zipcodeList.SelectedItem} AND business.state = '{stateList.SelectedItem.ToString()}' AND business.city = '{cityList.SelectedItem.ToString()}'";
+            }
+
+            if (zipcodeList.SelectedIndex > -1 && ((bool)checkBoxPrice1.IsChecked || (bool)checkBoxPrice2.IsChecked || 
+                (bool)checkBoxPrice3.IsChecked || (bool)checkBoxPrice4.IsChecked))
+            {
+                sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id AND attribute.name = 'RestaurantsPriceRange2'";
+                // INCLUDES AND STATEMENT FOR THE FIRST PRICE CHECKED
+                if ((bool)checkBoxPrice1.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice1 is checked!\n");
+                    sqlStr += "AND attribute.value='1'";
+                }
+                else if ((bool)checkBoxPrice2.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice2 is checked!\n");
+                    sqlStr += "AND attribute.value='2'";
+                }
+                else if ((bool)checkBoxPrice3.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice3 is checked!\n");
+                    sqlStr += "AND attribute.value='3'";
+                }
+                else if ((bool)checkBoxPrice4.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice4 is checked!\n");
+                    sqlStr += "AND attribute.value='4'";
+                }
+
+                // INCLUDES OR STATEMENT FOR ANY ADDITIONAL PRICE CHECKBOXES CHECKED
+                if ((bool)checkBoxPrice1.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice1 is checked!\n");
+                    sqlStr += "OR attribute.value='1'";
+                }
+                if ((bool)checkBoxPrice2.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice2 is checked!\n");
+                    sqlStr += "OR attribute.value='2'";
+                }
+                if ((bool)checkBoxPrice3.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice3 is checked!\n");
+                    sqlStr += "OR attribute.value='3'";
+                }
+                if ((bool)checkBoxPrice4.IsChecked)
+                {
+                    System.Console.WriteLine("checkboxPrice4 is checked!\n");
+                    sqlStr += "OR attribute.value='4'";
+                }
+
+                sqlStr += ")";
+            }
+
+            // ATTRIBUTE CHECKBOX SELECTION
+            if (zipcodeList.SelectedIndex > -1)
+            {
+                // --------------------- Filter By Attributes -------------------------------- //
+
+                // Accepts Credit Cards
+                if ((bool)acceptsCreditCard.IsChecked)
+                {
+                    // sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    // sqlStr += "AND attribute.name='BusinessAcceptsCreditCards'";
+                    // sqlStr += "AND attribute.value='True')";
+
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id AND attribute.name = 'BusinessAcceptsCreditCards' AND attribute.value = 'True')";
+                }
+
+                // Takes Reservations
+                if ((bool)takesReservations.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='RestaurantsReservations'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Wheelchair Accessible
+                if ((bool)wheelchairAccessible.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='WheelchairAccessible'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Outdoor Seating
+                if ((bool)outdoorSeating.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='OutdoorSeating'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Good for Kids
+                if ((bool)goodForKids.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='GoodForKids'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Good for Groups
+                if ((bool)goodForGroups.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='RestaurantsGoodForGroups'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Delivery
+                if ((bool)delivery.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='RestaurantsDelivery'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Take Out
+                if ((bool)takeOut.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='RestaurantsTakeOut'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Free Wi-Fi
+                if ((bool)freeWiFi.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='WiFi'";
+                    sqlStr += " AND attribute.value='free')";
+                }
+
+                // Bike Parking
+                if ((bool)bikeParking.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='BikeParking'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // --------------------- Filter By Meal -------------------------------- //
+
+                // Breakfast
+                if ((bool)breakfastCheckBox.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='breakfast'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Lunch
+                if ((bool)LunchCheckBox.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='lunch'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Brunch
+                if ((bool)brunchCheckBox.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='brunch'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Dinner
+                if ((bool)dinnerCheckBox.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='dinner'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Dessert
+                if ((bool)dessertCheckBox.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='dessert'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+
+                // Late Night
+                if ((bool)lateNightCheckBox.IsChecked)
+                {
+                    sqlStr += "AND business.business_id IN (SELECT attribute.business_id FROM business, attribute WHERE business.business_id = attribute.business_id";
+                    sqlStr += " AND attribute.name='latenight'";
+                    sqlStr += " AND attribute.value='True')";
+                }
+            }
+
+            // Add GROUP BY statement for business categories
+            if (categoryFilterList.Items.Count > 0 && zipcodeList.SelectedIndex > -1)
+            {
+                sqlStr += $"GROUP BY Business.business_id HAVING COUNT(Business.business_id) = {categoryFilterList.Items.Count}";
+            }
+
+            if (zipcodeList.SelectedIndex > -1)
+            {
+                if (sortResultsComboBox.SelectedItem == sortByName)
+                {
+                    sqlStr += "ORDER BY business.name";
+                }
+                else if (sortResultsComboBox.SelectedItem == sortByRating)
+                {
+                    sqlStr += "ORDER BY business.stars DESC";
+                }
+                else if (sortResultsComboBox.SelectedItem == sortByTips)
+                {
+                    sqlStr += "ORDER BY business.num_tips DESC";
+                }
+                else if (sortResultsComboBox.SelectedItem == sortByCheckins)
+                {
+                    sqlStr += "ORDER BY business.num_checkins DESC";
+                }
+                else if (sortResultsComboBox.SelectedItem == sortByDistance)
+                {
+                    sqlStr += "ORDER BY business.longitude"; // NEED TO FIX DISTANCE
+                }
+
+                Console.WriteLine(sqlStr);
                 executeQuery(sqlStr, addGridRow);
+                numBusinessLabel.Content = count; // Output the number of businesses found from the query
             }
         }
 
