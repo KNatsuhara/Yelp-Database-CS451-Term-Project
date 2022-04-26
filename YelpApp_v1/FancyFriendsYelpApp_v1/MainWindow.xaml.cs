@@ -19,7 +19,7 @@ namespace FancyFriendsYelpApp_v1
 {
     public static class Globals
     {
-        public static readonly String PASSWORD = "IglooZone1234$";
+        public static readonly String PASSWORD = "PASSWORD_HERE";
     }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
