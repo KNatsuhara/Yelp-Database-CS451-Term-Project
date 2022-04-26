@@ -475,7 +475,7 @@ namespace FancyFriendsYelpApp_v1
 
         private void searchBusinessesButton_Click(object sender, RoutedEventArgs e)
         {
-            businessDataGrid.SelectedIndex = -1;
+            // businessDataGrid.SelectedIndex = -1;
             count = 0;
             businessDataGrid?.Items?.Clear(); // Clears business Grid
             string sqlStr = "";
@@ -899,7 +899,17 @@ namespace FancyFriendsYelpApp_v1
         /// <param name="e"></param>
         private void businessDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+            Business B = null;
+            if (businessDataGrid.SelectedIndex > -1)
+            {
+                B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+            }
+            if (B == null)
+            {
+                return;
+            }
+
+            // Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
             if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
             {
                 // change name, address and hours labels
@@ -959,6 +969,19 @@ namespace FancyFriendsYelpApp_v1
                 {
                     CheckInsWindow checkins_window = new CheckInsWindow(B.business_id.ToString());
                     checkins_window.Show();
+                }
+            }
+        }
+
+        private void businessDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (businessDataGrid.SelectedIndex > -1)
+            {
+                Business B = businessDataGrid.Items[businessDataGrid.SelectedIndex] as Business;
+                if ((B.business_id != null) && (B.business_id.ToString().CompareTo("") != 0))
+                {
+                    TipsWindow tips_window = new TipsWindow(B.business_id.ToString(), current_userid);
+                    tips_window.Show();
                 }
             }
         }
