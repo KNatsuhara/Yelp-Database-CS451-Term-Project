@@ -158,11 +158,11 @@ namespace FancyFriendsYelpApp_v1
             //if these is actual text in the tip box insert to database
             //RANDOM USER ID USED
             //string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string current_time = DateTime.Now.ToString("HH:mm:ss");
+            string current_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string current_day = DateTime.Now.ToString("dd");
             string current_month = DateTime.Now.ToString("MM");
             string current_year = DateTime.Now.ToString("yyyy");
-            string sqlStr = $"INSERT INTO check_in (business_id, check_in_time, day, month, year) VALUES ('{this.bid.ToString()}', '{current_time}', '{current_day}', '{current_month}', '{current_year}')";
+            string sqlStr = $"INSERT INTO check_in (business_id, check_in_time) VALUES ('{this.bid.ToString()}', '{current_time}')";
 
             executeQuery(sqlStr, null);
             //Console.WriteLine(date);

@@ -88,7 +88,9 @@ namespace FancyFriendsYelpApp_v1
         private void getFriendTips(string bid)
         {
             Console.WriteLine("bid: " + this.bid);
-            string sqlstr = $"SELECT TO_CHAR(tip_time,'YYYY-MM-DD HH24:MI:SS') as tip_date,first_name,tip_text FROM Tip,Users,Friends WHERE Tip.business_id = '{this.bid}' AND Tip.user_id = Users.user_id AND (Friends.user_id = '{this.current_userid}' OR Friends.user_id2 = '{this.current_userid}') AND (Tip.user_id = Friends.user_id OR Tip.user_id = Friends.user_id2)";
+            //string sqlstr = $"SELECT distinct TO_CHAR(tip_time,'YYYY-MM-DD HH24:MI:SS') as tip_date,first_name,tip_text FROM Tip,Users,Friends WHERE Tip.business_id = '{this.bid}' AND Tip.user_id = Users.user_id AND (Friends.user_id = '{this.current_userid}' OR Friends.user_id2 = '{this.current_userid}') AND (Tip.user_id = Friends.user_id OR Tip.user_id = Friends.user_id2)";
+            string sqlstr = $"SELECT distinct TO_CHAR(tip_time,'YYYY-MM-DD HH24:MI:SS') as tip_date,first_name,tip_text FROM Tip,Users,Friends WHERE Tip.business_id = '{this.bid}' AND Tip.user_id = Users.user_id AND Friends.user_id = '{this.current_userid}' AND Tip.user_id = Friends.user_id2";
+
             executeQuery(sqlstr, populateFriendTipsGrid);
             /*
             SELECT TO_CHAR(tip_time,'YYYY-MM-DD HH24:MI:SS') as tip_date,first_name,likes,tip_text FROM Tip,Users,Friends WHERE Tip.business_id = 'mUVAMNN7BCQ9HGA9w_7C1g' AND Tip.user_id = Users.user_id AND (Friends.user_id = 'FgQCX3ztjhellw2hyRedxg' OR Friends.user_id2 = 'FgQCX3ztjhellw2hyRedxg') AND (Tip.user_id = Friends.user_id OR Tip.user_id = Friends.user_id2);
@@ -169,7 +171,7 @@ namespace FancyFriendsYelpApp_v1
                 //if these is actual text in the tip box insert to database
                 //RANDOM USER ID USED
                 string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                string sqlStr = $"INSERT INTO Tip (business_id, user_id, tip_time, tip_text, likes) VALUES ('{this.bid.ToString()}', 'Wkb8b9QJ35XTp-KYO0ojBQ', '{date}', '{tipTextBox.Text.ToString()}', '0')";
+                string sqlStr = $"INSERT INTO Tip (business_id, user_id, tip_time, tip_text, likes) VALUES ('{this.bid.ToString()}', '{this.current_userid}', '{date}', '{tipTextBox.Text.ToString()}', '0')";
 
                 executeQuery(sqlStr, null);
                 Console.WriteLine(date);
